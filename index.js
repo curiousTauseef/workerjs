@@ -21,8 +21,7 @@ function Worker(file, type) {
   }
   this.child.send(file);
   this.child.on('message', function (msg) {
-    var parsed = JSON.parse(msg);
-    self.onmessage && self.onmessage.call(self, parsed);
+    self.onmessage && self.onmessage.call(self, msg);
   });
   this.child.on('error', function (err) {
     self.onerror && self.onerror(err);
@@ -30,7 +29,7 @@ function Worker(file, type) {
 }
 
 Worker.prototype.postMessage = function (msg) {
-  this.child.send(JSON.stringify({ data: msg }));
+  this.child.send({ data: msg });
 };
 
 Worker.prototype.terminate = function() {

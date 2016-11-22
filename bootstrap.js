@@ -1,7 +1,7 @@
 var noop = function () { };
 global.self = {
   postMessage: function (msg) {
-    process.send(JSON.stringify({ data: msg }));
+    process.send({ data: msg });
   },
   onmessage: noop,
   onerror: noop,
@@ -34,8 +34,7 @@ Object.keys(global.self).forEach(function (key) {
 });
 
 process.on('message', function (msg) {
-  var parsed = JSON.parse(msg);
-  global.self.onmessage && global.self.onmessage(parsed);
+  global.self.onmessage && global.self.onmessage(msg);
 });
 process.on('error', function (err) {
   global.self.onerror && global.self.onerror(err);
