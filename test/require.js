@@ -51,7 +51,7 @@ describe('workerjs', function() {
     it('should be able to require other modules', function(done) {
       var worker = new Worker(fixturePath('requireworker.js'), true);
       worker.addEventListener('message', function (msg) {
-        expect(msg.data).to.equal(87178291200.00021);
+        expect(msg.data).to.equal(15);
         done();
       });
       worker.postMessage(15);
