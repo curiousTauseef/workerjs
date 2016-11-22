@@ -57,6 +57,26 @@ describe('workerjs', function() {
       worker.postMessage(15);
     });
 
+    it('should be able to pass different value types', function(done) {
+      var worker = new Worker(fixturePath('requireworker.js'), true);
+      var obj = {
+        'number' : 42,
+        'string' : "hello",
+        'object' : {'a': 1},
+        'array'  : [1,2,3],
+        'typedArray' : new Uint8Array([1,2,3])
+      };
+      worker.addEventListener('message', function (msg) {
+        expect(msg.data.number).to.equal(obj.number);
+        expect(msg.data.string).to.equal(obj.string);
+        expect(msg.data.object).to.eql(obj.object);
+        expect(msg.data.array).to.eql(obj.array);
+        expect(msg.data.typedArray).to.eql(obj.typedArray);
+        done();
+      });
+      worker.postMessage(obj);
+    });
+
     it('should run the module.exports function', function(done) {
       var worker = new Worker(fixturePath('exportsworker.js'), true);
       worker.addEventListener('message', function (msg) {
